@@ -7,4 +7,3 @@
 bool InitDSP(void);
 void DSP_loop(void*);
 bool StopDSP(void);
-int32_t PackData(int16_t, int16_t);

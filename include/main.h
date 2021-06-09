@@ -1,4 +1,10 @@
 #include <BluetoothSerial.h> 
+#include <Arduino.h>
+#include <FreeRTOS.h>
+
+#include "DSP.h"
+#include "SendData.h"
+#include "ADC_sample.h"
 
 #define Delay(t) vTaskDelay(t/portTICK_PERIOD_MS)
 

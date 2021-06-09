@@ -1,4 +1,4 @@
-#include "master.h"
+#include "main.h"
 
 SemaphoreHandle_t shDataStream = NULL;
 
@@ -18,14 +18,15 @@ void IRAM_ATTR onTimer()
 { 
   uint16_t uiSample;
 
- portENTER_CRITICAL_ISR(&timerMux);
-   uiSample = analogRead(ADC_PIN);
+  portENTER_CRITICAL_ISR(&timerMux);
 
-   if(pdFALSE == xQueueIsQueueFullFromISR(qhSample))
-   {
-      xQueueSendFromISR(qhSample, (void*)&uiSample, &HPTaskWoken);
-   }
- portEXIT_CRITICAL_ISR(&timerMux);
+    uiSample = analogRead(ADC_PIN);
+    if(pdFALSE == xQueueIsQueueFullFromISR(qhSample))
+    {
+        xQueueSendFromISR(qhSample, (void*)&uiSample, &HPTaskWoken);
+    }
+    
+  portEXIT_CRITICAL_ISR(&timerMux);
 }
 
 bool InitSampling(void)

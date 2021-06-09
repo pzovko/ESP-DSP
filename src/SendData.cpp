@@ -1,4 +1,4 @@
-#include "master.h"
+#include "main.h"
 
 TaskHandle_t thSendData;
 //uint16_t* buffer;
@@ -70,3 +70,7 @@ bool StopSendData(void)
         return true;    
 }
 
+int32_t PackData(int16_t raw, int16_t filtered)
+{
+    return (int32_t)((raw << 16)|(filtered&65535));
+}
