@@ -1,7 +1,5 @@
 #include "main.h"
 
-#include <driver/adc.h>
-
 TaskHandle_t thSendData;
 
 bool InitSendData(void)

@@ -1,14 +1,5 @@
 #include "main.h"
-
 #include "FIR.h"
-
-#define FIR_ORDER   64
-
-typedef struct {
-    uint16_t raw[DSP_SAMPLES];
-    float filtered[DSP_SAMPLES];
-    uint16_t fft[DSP_SAMPLES];
-}Data;
 
 float coeff[] = {0.0001084f,0.0007729f,0.0009660f,0.0004308f,-0.0006666f,-0.0016312f,-0.0015460f,0.0000000f,
                  0.0022551f,0.0034511f,0.0020203f,-0.0018317f,-0.0055820f,-0.0058130f,-0.0010072f,0.0063925f,
