@@ -95,8 +95,9 @@ void SamplingLoop(void * param)
             if(uxQueueMessagesWaiting(qhSample))
             {
                 #if CHECK_BUFFER
+                    Serial.print("Queued samples: ");
                     Serial.print(uxQueueMessagesWaiting(qhSample));
-                    Serial.print(',');
+                    Serial.print(' ');
                 #endif
 
                 ResetBuffer(uiDataBuffer, DATA_BUFFER_EOB);
@@ -114,6 +115,7 @@ void SamplingLoop(void * param)
                 }
 
                 #if CHECK_BUFFER
+                    Serial.print(" Buffer count: ");
                     Serial.print(uiBufferCount);
                     Serial.print('\r');
                 #endif 
@@ -130,7 +132,7 @@ void SamplingLoop(void * param)
             }
         }
 
-        Delay(50);  
+        Delay(100);  
     }
 }
 

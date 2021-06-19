@@ -1,5 +1,5 @@
 #define ADC_PIN  15
-#define SAMPLE_PRESCALER 8000//16000//2//16000 //5kHz
+#define SAMPLE_PRESCALER 16000 // 5kHz
 #define QUEUE_LEN        2500
 
 #define DATA_SAMPLES    2048

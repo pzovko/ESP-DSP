@@ -68,6 +68,7 @@ bool InitDSP(void)
 void DSP_loop(void * param)
 {
     uint16_t* temp;
+    int i = 0;
 
     while(true)
     {
@@ -108,17 +109,20 @@ void DSP_loop(void * param)
               
                 x.filtered[count] = FIRFilter_Update(&stFIR, (float)x.raw[count]);
 
-                //Serial.println(x.raw[count]);
-
-                Serial.print(x.raw[count]);
-                Serial.print(',');
-                Serial.print(x.filtered[count]);
-                Serial.print('\r');
-
+               // btSerial.println(x.raw[count]);
+               // Serial.print(" ");
+               // Serial.print((int16_t) (x.filtered[count]));
+               // Serial.println();
                 count++;
-            }
+                //Delay(5);
+                i++;
+                if(i == 4095)
+                    i = 0;
+
+                    btSerial.println(i);
+            }       
         }
-        Delay(50);
+        Delay(100);
     }
 }
 

@@ -18,9 +18,5 @@
 #define DEBUG        1
 #define CHECK_BUFFER 0
 
-#if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
-#error Bluetooth is not enabled
-#endif
-
 extern SemaphoreHandle_t shDataStream;
 extern BluetoothSerial btSerial;

@@ -1,22 +1,12 @@
 #include "main.h"
 
+#include <driver/adc.h>
+
 TaskHandle_t thSendData;
-//uint16_t* buffer;
 
 bool InitSendData(void)
 {
-   /* if(NULL == (buffer = (uint16_t*)pvPortMalloc(DATA_BUFFER_SIZE*sizeof(uint16_t))))
-    {
-        #if DEBUG
-            Serial.println("Error creating temporary buffer.");
-        #endif
-        return true;
-    }
-    else
-    {
-        ResetBuffer(buffer);
-    }
-    */
+
      if(pdPASS != xTaskCreatePinnedToCore(SendData_loop, "SendData_task", DATA_STACK_SIZE, NULL, 1, &thSendData, DATA_CORE))
      {
          #if DEBUG
@@ -30,33 +20,40 @@ bool InitSendData(void)
   
 void SendData_loop(void * param)
 {
-  /*  uint16_t* temp;
-
+    int i = 0;
+    bool  toggle = false;
+    //vTaskDelay(500/portTICK_PERIOD_MS);
     while(true)
     {
-        temp = GetBuffer();
-        if((pdTRUE == xSemaphoreTake(shDataStream, 0))&&(*(temp + 0) != DATA_BUFFER_EOB))
+        
+       // btSerial.println(analogRead(15));
+       
+       // Serial.println(i);
+        i++;
+        if(i == 600)
         {
-            
-            for(uint16_t count = 0 ;(count < DATA_BUFFER_SIZE)&&(*(temp + count) != DATA_BUFFER_EOB); count++)
-                *(buffer + count) = *(temp + count);
-
-            if(pdFALSE == xSemaphoreGive(shDataStream))
-            {
-               #if DEBUG
-                 Serial.println("Error giving semaphore.");
-               #endif 
-               break;
-            }
-
-            for(uint16_t count = 0 ;(count < DATA_BUFFER_SIZE)&&(*(buffer + count) != DATA_BUFFER_EOB); count++)
-            { 
-                btSerial.println(*(buffer + count));             
-            }
-            ResetBuffer(buffer);
+            toggle = !toggle;
+             
+            i = 0;
         }
-        vTaskDelay(500/portTICK_PERIOD_MS);
-    }*/
+
+        if(toggle)
+        {
+            btSerial.println(PackData(2000, 0));
+        }  
+        else
+        {
+            btSerial.println(PackData(0, 2000));
+        }
+            
+
+       // Delay(10);
+
+         
+       // Delay(20);
+       //Delay(1);
+    }
+    
 }
 
 bool StopSendData(void)
