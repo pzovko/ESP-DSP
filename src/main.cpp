@@ -6,6 +6,7 @@
 #endif
 
 BluetoothSerial btSerial;
+settings Settings;
 
 void callback(esp_spp_cb_event_t event, esp_spp_cb_param_t *param){
 
@@ -22,11 +23,7 @@ void callback(esp_spp_cb_event_t event, esp_spp_cb_param_t *param){
     break;
 
     case ESP_SPP_WRITE_EVT:
-      #if DEBUG
-        //Serial.println("");
-      #endif
     break;
-
     case ESP_SPP_UNINIT_EVT:
     break;
     case ESP_SPP_DISCOVERY_COMP_EVT:
@@ -67,6 +64,10 @@ void setup() {
   #if DEBUG
     Serial.begin(BAUDRATE);
   #endif
+
+  Settings.filter_enable = false;
+  Settings.SampleRate = 50000;
+  Settings.FirOrder = 64;
 
   btSerial.register_callback(callback);
 
