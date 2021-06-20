@@ -22,8 +22,7 @@ void callback(esp_spp_cb_event_t event, esp_spp_cb_param_t *param){
 
       InitSampling();
       InitDSP(); 
-      InitSendData();
-
+      InitSendData();    
     break;
 
     case ESP_SPP_WRITE_EVT:
@@ -61,7 +60,6 @@ void callback(esp_spp_cb_event_t event, esp_spp_cb_param_t *param){
       StopSamplingLoop();
       StopDSP();
       ESP.restart();
-
     break;
   }   
 }
@@ -71,10 +69,6 @@ void setup() {
   #if DEBUG
     Serial.begin(BAUDRATE);
   #endif
-
-  Settings.filter_enable = false;
-  Settings.SampleRate = 10000;
-  Settings.FirOrder = 64;
 
   if(!btSerial.begin("ESP"))
   {
@@ -117,7 +111,7 @@ void GetSettings()
 
         switch(iterate)
         {
-          case 0:
+          case 0: 
             sscanf(c, "%d", (int*)&Settings.SampleRate);
             iterate++;
             #if DEBUG

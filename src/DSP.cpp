@@ -66,6 +66,7 @@ void DSP_loop(void * param)
                 }
                 if(Settings.filter_enable)
                     data.filtered = (uint16_t)FIRFilter_Update(&stFIR, (float)data.raw);
+                 
                 xQueueSend(qhSend, (void*)&data, portMAX_DELAY);
             }  
         }

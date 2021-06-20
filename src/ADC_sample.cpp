@@ -3,8 +3,27 @@
 TaskHandle_t thSamplingLoop;
 QueueHandle_t qhSample;
 
+//BaseType_t  HPTaskWoken = 0;
+
 uint16_t *uiDataBuffer;
 
+//hw_timer_t * timer = NULL;
+//portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;
+
+/*void IRAM_ATTR onTimer()
+{ 
+  uint16_t uiSample;
+
+  portENTER_CRITICAL_ISR(&timerMux);
+
+    uiSample = analogRead(34);
+    if(pdFALSE == xQueueIsQueueFullFromISR(qhSample))
+    {
+        xQueueSendFromISR(qhSample, (void*)&uiSample, &HPTaskWoken);
+    }
+    
+  portEXIT_CRITICAL_ISR(&timerMux);
+}*/
 
 bool InitSampling(void)
 {
@@ -26,8 +45,12 @@ bool InitSampling(void)
     }
     else
     {
+       /* timer = timerBegin(0, (uint16_t)(80000000L/Settings.SampleRate), true);
+        timerAttachInterrupt(timer, &onTimer, true);
+        timerAlarmWrite(timer, 1, true);
+        timerAlarmEnable(timer);*/
         configure_i2s();
-        if(pdPASS != xTaskCreatePinnedToCore(SamplingLoop, "Sampling_task", DATA_STACK_SIZE, NULL, 1, &thSamplingLoop, ADC_SAMPLE_CORE))
+        if(pdPASS != xTaskCreatePinnedToCore(SamplingLoop, "Sampling_task", DATA_STACK_SIZE, NULL, 2, &thSamplingLoop, ADC_SAMPLE_CORE))
         {
             #if DEBUG
                 Serial.println("Error creating sampling task.");
@@ -49,7 +72,6 @@ void SamplingLoop(void * param)
             *(uiDataBuffer + uiBufferCount) = *(uiDataBuffer + uiBufferCount)& 0xFFF;
             xQueueSend(qhSample, (void*)(uiDataBuffer + uiBufferCount), portMAX_DELAY);
         }
-
     }
 }
 

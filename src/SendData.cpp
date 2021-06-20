@@ -2,14 +2,15 @@
 
 TaskHandle_t thSendData;
 Data dataSend;
+BaseType_t err;
 
 bool InitSendData(void)
 {
-
-     if(pdPASS != xTaskCreatePinnedToCore(SendData_loop, "SendData_task", DATA_STACK_SIZE, NULL, 1, &thSendData, DATA_CORE))
+     if(pdPASS !=(err = xTaskCreatePinnedToCore(SendData_loop, "SendData_task", DATA_STACK_SIZE, NULL, 1, &thSendData, DATA_CORE)))
      {
          #if DEBUG
-            Serial.println("Error creating SendData task.");     
+            Serial.print("Error creating SendData task.");     
+            Serial.println(err);
          #endif
         return true;
      }
@@ -19,7 +20,6 @@ bool InitSendData(void)
   
 void SendData_loop(void * param)
 {
-
     while(true)
     {
         if(qhSend != NULL)
@@ -33,8 +33,11 @@ void SendData_loop(void * param)
                     #endif
                     break;
                 }
+                
                 if(Settings.filter_enable)
+                {
                     btSerial.println(PackData(dataSend.raw, dataSend.filtered));
+                }  
                 else
                     btSerial.println(dataSend.raw);
             }      

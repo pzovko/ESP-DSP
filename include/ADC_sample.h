@@ -1,4 +1,4 @@
-#define DATA_STACK_SIZE 10000
+#define DATA_STACK_SIZE 2500
 
 bool InitSampling(void);
 void SamplingLoop(void*);
