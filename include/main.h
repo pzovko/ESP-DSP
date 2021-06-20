@@ -23,6 +23,9 @@
 #define DEBUG        1
 #define CHECK_BUFFER 0
 
+#define ASCII_TRUE  84
+#define ASCII_FALSE 70
+
 typedef struct _settings{
     bool filter_enable;
     uint16_t SampleRate;

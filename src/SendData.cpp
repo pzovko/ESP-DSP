@@ -34,7 +34,7 @@ void SendData_loop(void * param)
                     break;
                 }
                 if(Settings.filter_enable)
-                     btSerial.println(PackData(dataSend.raw, dataSend.filtered));
+                    btSerial.println(PackData(dataSend.raw, dataSend.filtered));
                 else
                     btSerial.println(dataSend.raw);
             }      
