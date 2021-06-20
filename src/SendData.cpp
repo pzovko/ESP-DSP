@@ -1,6 +1,7 @@
 #include "main.h"
 
 TaskHandle_t thSendData;
+Data dataSend;
 
 bool InitSendData(void)
 {
@@ -18,40 +19,24 @@ bool InitSendData(void)
   
 void SendData_loop(void * param)
 {
-    int i = 0;
-    bool  toggle = false;
-    //vTaskDelay(500/portTICK_PERIOD_MS);
+
     while(true)
     {
-        
-       // btSerial.println(analogRead(15));
-       
-       // Serial.println(i);
-        i++;
-        if(i == 600)
+        if(qhSend != NULL)
         {
-            toggle = !toggle;
-             
-            i = 0;
-        }
-
-        if(toggle)
-        {
-            btSerial.println(PackData(2000, 0));
-        }  
-        else
-        {
-            btSerial.println(PackData(0, 2000));
-        }
-            
-
-       // Delay(10);
-
-         
-       // Delay(20);
-       //Delay(1);
+            while(uxQueueMessagesWaiting(qhSend))
+            {
+                if(pdFALSE == xQueueReceive(qhSend,(void*)&dataSend, 0))
+                {
+                    #if DEBUG
+                        Serial.println("Raw data queue full.");
+                    #endif
+                    break;
+                }
+                 btSerial.println(PackData(dataSend.raw, dataSend.filtered));
+            }      
+        }   
     }
-    
 }
 
 bool StopSendData(void)

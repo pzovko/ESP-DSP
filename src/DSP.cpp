@@ -14,10 +14,9 @@ float coeff[] = {0.0001084f,0.0007729f,0.0009660f,0.0004308f,-0.0006666f,-0.0016
 
 FIRFilter stFIR;
 float fFIRbuffer[FIR_ORDER];
-int16_t *fir_buffer;
-Data x;
+Data data;
 
-QueueHandle_t qhRawData;
+QueueHandle_t qhSend;
 TaskHandle_t thDSP;
 
 
@@ -25,23 +24,10 @@ bool InitDSP(void)
 {
     FIRFilter_Init(&stFIR, coeff, fFIRbuffer, FIR_ORDER);
 
-    if(NULL == (fir_buffer = (int16_t*)pvPortMalloc(DATA_BUFFER_SIZE*sizeof(int16_t))))
+    if(NULL == (qhSend = xQueueCreate(QUEUE_SIZE, sizeof(Data))))
     {
         #if DEBUG
-            Serial.println("Error creating temporary buffer.");
-        #endif
-        return true;
-    }
-    else
-    {
-        for(int16_t count = 0; count < DATA_BUFFER_SIZE; count++)
-            *(fir_buffer + count) = FIR_EOB;
-    }
-
-    if(NULL == (qhRawData = xQueueCreate(DSP_RAW_BUF_SIZE, sizeof(uint16_t))))
-    {
-        #if DEBUG
-            Serial.println("Error creating RawData queue.");
+            Serial.println("Error creating qhSend queue.");
         #endif
         return true;
     }
@@ -58,69 +44,32 @@ bool InitDSP(void)
 
 void DSP_loop(void * param)
 {
-    uint16_t* temp;
-    int i = 0;
-
     while(true)
     {
-        if(pdTRUE == xSemaphoreTake(shDataStream, 0)) 
+        if(qhSample != NULL)
         {
-            temp = GetBuffer();
-            for(uint16_t count = 0 ;(count < DATA_BUFFER_SIZE)&&(*(temp + count) != DATA_BUFFER_EOB); count++)
+            while(uxQueueMessagesWaiting(qhSample))
             {
-                if(pdTRUE != xQueueSend(qhRawData, (void*)(temp + count), 0))
-                {
-                    #if DEBUG
-                        Serial.println("RawData queue full.");
-                    #endif
-                    break;
-                }  
-            }
-
-            if(pdFALSE == xSemaphoreGive(shDataStream))
-            {
-               #if DEBUG
-                 Serial.println("Error giving semaphore.");
-               #endif 
-               break;
-            }
-
-
-            uint16_t count = 0;
-
-            while((uxQueueMessagesWaiting(qhRawData) >= DSP_SAMPLES)&&(count < DSP_SAMPLES))
-            {
-                if(pdFALSE == xQueueReceive(qhRawData,(void*)&x.raw[count], 0))
+                if(pdFALSE == xQueueReceive(qhSample,(void*)&data.raw, 0))
                 {
                     #if DEBUG
                         Serial.println("Raw data queue full.");
                     #endif
                     break;
                 }
-              
-                x.filtered[count] = FIRFilter_Update(&stFIR, (float)x.raw[count]);
 
-               // btSerial.println(x.raw[count]);
-               // Serial.print(" ");
-               // Serial.print((int16_t) (x.filtered[count]));
-               // Serial.println();
-                count++;
-                //Delay(5);
-                i++;
-                if(i == 4095)
-                    i = 0;
-
-                    btSerial.println(i);
-            }       
+                data.filtered = (uint16_t)FIRFilter_Update(&stFIR, (float)data.raw);
+                xQueueSend(qhSend, (void*)&data, portMAX_DELAY);
+            }  
         }
-        Delay(100);
     }
 }
 
 bool StopDSP(void)
 {
-    if(thDSP != NULL)
+    if((thDSP != NULL)&& (qhSend != NULL))
     {
+        vQueueDelete(qhSend);
         vTaskDelete(thDSP);
         return false;
     }

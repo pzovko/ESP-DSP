@@ -2,5 +2,5 @@
 #define NUM_SAMPLES   1024                       // number of samples
 #define DUMP_INTERVAL 50  
 
-void ADC_Sampling();
+size_t ADC_Sampling(uint16_t*);
 void configure_i2s();

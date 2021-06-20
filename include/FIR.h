@@ -10,6 +10,9 @@
 * Last changed: 01 Dec 2019
 *
 */
+/*
+    changed uint8_t to uint16_t  -- > PZ 
+*/
 
 #ifndef FIR_FILTER_H
 #define FIR_FILTER_H
@@ -20,11 +23,11 @@ typedef struct {
     float out;
 	float *coeff;
 	float *buf;
-	uint8_t order;
-	uint8_t putIndex;
+	uint16_t order;
+	uint16_t putIndex;
 } FIRFilter ;
 
-void FIRFilter_Init(FIRFilter *filt, float *coeff, float *buf, const uint8_t order) {
+void FIRFilter_Init(FIRFilter *filt, float *coeff, float *buf, const uint16_t order) {
 	filt->out = 0.0f;
 	
 	filt->coeff = coeff;
@@ -32,7 +35,7 @@ void FIRFilter_Init(FIRFilter *filt, float *coeff, float *buf, const uint8_t ord
 	filt->order = order;
 	filt->putIndex = 0;
 
-	for (uint8_t n = 0; n < order; n++) {
+	for (uint16_t n = 0; n < order; n++) {
 		filt->buf[n] = 0.0f;
 	}
 }
@@ -42,10 +45,10 @@ float FIRFilter_Update(FIRFilter *filt, float in) {
     filt->buf[filt->putIndex] = in;
     
     /* Compute filter output */
-    uint8_t getIndex = filt->putIndex;
+    uint16_t getIndex = filt->putIndex;
     
     filt->out = 0.0f;
-    for (uint8_t n = 0; n < filt->order; n++) {
+    for (uint16_t n = 0; n < filt->order; n++) {
         filt->out = filt->out + filt->coeff[n] * filt->buf[getIndex];
         
         if (getIndex == 0) {

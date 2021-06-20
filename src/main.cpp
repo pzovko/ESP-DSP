@@ -15,15 +15,31 @@ void callback(esp_spp_cb_event_t event, esp_spp_cb_param_t *param){
       #if DEBUG
         Serial.println("Client Connected.");
       #endif
+
+      InitSampling();
+      InitDSP(); 
       InitSendData();
-      //InitSampling();
-      //InitDSP(); 
     break;
 
     case ESP_SPP_WRITE_EVT:
       #if DEBUG
-        //Serial.println("Writing bluetooth data.");
+        //Serial.println("");
       #endif
+    break;
+
+    case ESP_SPP_UNINIT_EVT:
+    break;
+    case ESP_SPP_DISCOVERY_COMP_EVT:
+    break;
+    case ESP_SPP_START_EVT:
+    break;
+    case ESP_SPP_CL_INIT_EVT:
+    break;
+    case ESP_SPP_DATA_IND_EVT:
+    break;
+    case ESP_SPP_CONG_EVT:
+    break;
+    case ESP_SPP_SRV_STOP_EVT:
     break;
 
     case ESP_SPP_SUCCESS:
@@ -33,7 +49,6 @@ void callback(esp_spp_cb_event_t event, esp_spp_cb_param_t *param){
     break;
 
     case ESP_SPP_OPEN_EVT:
-      Serial.println("Radi nesto");
     break;
 
     case ESP_SPP_CLOSE_EVT:
@@ -41,13 +56,10 @@ void callback(esp_spp_cb_event_t event, esp_spp_cb_param_t *param){
         Serial.println("Client disconnected.");
       #endif
       StopSendData();
-      //StopSamplingLoop();
-      //StopDSP();
+      StopSamplingLoop();
+      StopDSP();
     break;
   }   
-   // InitSampling();
-   // InitDSP();
-
 }
 
 void setup() {
@@ -55,19 +67,15 @@ void setup() {
   #if DEBUG
     Serial.begin(BAUDRATE);
   #endif
-Serial.begin(BAUDRATE);
 
   btSerial.register_callback(callback);
 
   if(!btSerial.begin("ESP"))
-    {
-      #if DEBUG
-          Serial.println("Error initialising bluetooth.");
-      #endif
-    }
-
-    //InitSampling();
-   // InitDSP();
+  {
+    #if DEBUG
+        Serial.println("Error initialising bluetooth.");
+    #endif
+  }
 }
 
 void loop() {
