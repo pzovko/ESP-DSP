@@ -65,12 +65,13 @@ void SamplingLoop(void * param)
 {  
     while(true)
     {   
-        ADC_Sampling(uiDataBuffer);
-
-        for(int uiBufferCount = 0; uiBufferCount < NUM_SAMPLES; uiBufferCount++)
+        if(ADC_Sampling(uiDataBuffer))
         {
-            *(uiDataBuffer + uiBufferCount) = *(uiDataBuffer + uiBufferCount)& 0xFFF;
-            xQueueSend(qhSample, (void*)(uiDataBuffer + uiBufferCount), portMAX_DELAY);
+            for(int uiBufferCount = 0; uiBufferCount < NUM_SAMPLES; uiBufferCount++)
+            {
+                *(uiDataBuffer + uiBufferCount) = *(uiDataBuffer + uiBufferCount)& 0xFFF;
+                xQueueSend(qhSample, (void*)(uiDataBuffer + uiBufferCount), portMAX_DELAY);
+            }
         }
     }
 }

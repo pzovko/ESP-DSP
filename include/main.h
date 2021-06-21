@@ -23,6 +23,7 @@
 #define BAUDRATE     115200
 #define DEBUG        1
 #define CHECK_BUFFER 0
+#define DEBUG_I2S    1
 
 typedef struct _settings{
     bool filter_enable;
