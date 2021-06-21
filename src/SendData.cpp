@@ -36,15 +36,15 @@ void SendData_loop(void * param)
 
                 if(Settings.filter_enable)
                 {
-                    btSerial.println(PackData(dataSend.raw, dataSend.filtered));
-                   //Serial.println(PackData(dataSend.raw, dataSend.filtered));
+                  btSerial.println((PackData(dataSend.raw, dataSend.filtered))^Settings.SharedKey);
                 }  
                 else
                 {
-                    btSerial.println(dataSend.raw);
-                }  
+                  btSerial.println((dataSend.raw^Settings.SharedKey));                  
+                } 
+               vTaskDelay(1); 
             }      
-        }   
+        }  
     }
 }
 

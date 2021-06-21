@@ -50,7 +50,7 @@ bool InitSampling(void)
         timerAlarmWrite(timer, 1, true);
         timerAlarmEnable(timer);*/
         configure_i2s();
-        if(pdPASS != xTaskCreatePinnedToCore(SamplingLoop, "Sampling_task", DATA_STACK_SIZE, NULL, 2, &thSamplingLoop, ADC_SAMPLE_CORE))
+        if(pdPASS != xTaskCreatePinnedToCore(SamplingLoop, "Sampling_task", ADC_STACK_SIZE, NULL, 2, &thSamplingLoop, ADC_SAMPLE_CORE))
         {
             #if DEBUG
                 Serial.println("Error creating sampling task.");

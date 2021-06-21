@@ -9,6 +9,7 @@
 #include "DSP.h"
 #include "SendData.h"
 #include "ADC_sample.h"
+#include "crypt.h"
 
 
 #define Delay(t) vTaskDelay(t/portTICK_PERIOD_MS)
@@ -28,6 +29,11 @@ typedef struct _settings{
     uint16_t SampleRate;
     uint16_t FirOrder;
     float* FilterCoeff;
+
+    uint32_t PublicKeyPC;
+    uint32_t PublicKeyESP;
+    uint32_t PrivateKey;
+    uint32_t SharedKey;
 }settings;
 
 extern settings Settings;

@@ -1,4 +1,4 @@
-#define ADC_CHANNEL   ADC1_CHANNEL_6 // GPIO34
+#define ADC_CHANNEL   ADC1_CHANNEL_6 
 #define NUM_SAMPLES   1024                       // number of samples
  
 

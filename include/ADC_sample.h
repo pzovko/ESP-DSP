@@ -1,4 +1,4 @@
-#define DATA_STACK_SIZE 2500
+#define ADC_STACK_SIZE 5000
 
 bool InitSampling(void);
 void SamplingLoop(void*);

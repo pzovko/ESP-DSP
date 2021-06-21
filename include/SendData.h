@@ -1,4 +1,4 @@
-#define DATA_STACK_SIZE 2500
+#define DATA_STACK_SIZE 5000
 
 bool InitSendData(void);
 void SendData_loop(void*);

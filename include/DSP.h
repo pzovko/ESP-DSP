@@ -1,5 +1,5 @@
 
-#define DSP_STACK_SIZE 2500
+#define DSP_STACK_SIZE 5000
 
 bool InitDSP(void);
 void DSP_loop(void*);
