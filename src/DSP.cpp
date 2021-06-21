@@ -20,14 +20,6 @@ bool InitDSP(void)
             #endif
             return true;
         }
-
-        if(NULL == (Settings.FilterCoeff = (float*)pvPortMalloc(Settings.FirOrder*sizeof(float))))
-        {
-            #if DEBUG
-                Serial.println("Error creating FIRCoeff buffer.");
-            #endif
-            return true;
-        }
         FIRFilter_Init(&stFIR, Settings.FilterCoeff, fFIRbuffer, Settings.FirOrder);
     }
 
@@ -65,8 +57,9 @@ void DSP_loop(void * param)
                     break;
                 }
                 if(Settings.filter_enable)
-                    data.filtered = (uint16_t)FIRFilter_Update(&stFIR, (float)data.raw);
-                 
+                {
+                    data.filtered = (int16_t)FIRFilter_Update(&stFIR, (float)data.raw);
+                }
                 xQueueSend(qhSend, (void*)&data, portMAX_DELAY);
             }  
         }

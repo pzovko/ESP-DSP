@@ -10,7 +10,7 @@ void configure_i2s() {
     .bits_per_sample = I2S_BITS_PER_SAMPLE_16BIT,                                 // 16 bit I2S
     .channel_format = I2S_CHANNEL_FMT_ONLY_LEFT,                                 // only the left channel I2S_CHANNEL_FMT_ALL_LEFT
     .communication_format = (i2s_comm_format_t)(I2S_COMM_FORMAT_I2S | I2S_COMM_FORMAT_I2S_MSB),   // I2S format
-    .intr_alloc_flags = ESP_INTR_FLAG_LEVEL1,                                                        // none
+    .intr_alloc_flags = ESP_INTR_FLAG_LEVEL3, //ESP_INTR_FLAG_LEVEL1,                                                        // none
     .dma_buf_count = 8,                                                           // number of DMA buffers
     .dma_buf_len = NUM_SAMPLES,                                                   // number of samples
     .use_apll = 0,                                                                // no Audio PLL
