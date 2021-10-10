@@ -17,7 +17,7 @@ Custom hardware is also developed for test purposes, so it is still in an early 
   
 - Support for IIR filters
  
- Main focus was on FIR filters, but IIR filters will be added too.
+  Main focus was on FIR filters, but IIR filters will be added too.
 
 
 
